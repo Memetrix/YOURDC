@@ -16,18 +16,18 @@ export default function Footer() {
             <h4 className="font-semibold mb-4 text-base">Услуги</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/services/colocation" className="text-gray-300 hover:text-white transition-colors duration-200">
-                  Colocation
+                <Link href="/services" className="text-gray-300 hover:text-white transition-colors duration-200">
+                  Все услуги
                 </Link>
               </li>
               <li>
-                <Link href="/services/cloud" className="text-gray-300 hover:text-white transition-colors duration-200">
-                  Облачные решения
+                <Link href="/advantages" className="text-gray-300 hover:text-white transition-colors duration-200">
+                  Наши преимущества
                 </Link>
               </li>
               <li>
-                <Link href="/services/additional" className="text-gray-300 hover:text-white transition-colors duration-200">
-                  Дополнительные услуги
+                <Link href="/contacts" className="text-gray-300 hover:text-white transition-colors duration-200">
+                  Получить консультацию
                 </Link>
               </li>
             </ul>
@@ -47,8 +47,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/certificates" className="text-gray-300 hover:text-white transition-colors duration-200">
-                  Сертификаты
+                <Link href="/contacts" className="text-gray-300 hover:text-white transition-colors duration-200">
+                  Контакты
                 </Link>
               </li>
             </ul>
@@ -69,11 +69,11 @@ export default function Footer() {
             © 2025 YOURDC. Все права защищены
           </p>
           <div className="flex gap-4 text-sm">
-            <Link href="/privacy" className="text-gray-300 hover:text-white transition-colors duration-200">
-              Политика конфиденциальности
+            <Link href="/about" className="text-gray-300 hover:text-white transition-colors duration-200">
+              О компании
             </Link>
-            <Link href="/terms" className="text-gray-300 hover:text-white transition-colors duration-200">
-              Условия использования
+            <Link href="/contacts" className="text-gray-300 hover:text-white transition-colors duration-200">
+              Связаться с нами
             </Link>
           </div>
         </div>

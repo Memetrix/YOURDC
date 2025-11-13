@@ -351,16 +351,11 @@ export default async function Home() {
       {/* News Section */}
       <section className="py-16 lg:py-24 bg-gray-50">
         <div className="container">
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <h2 className="text-data-blue mb-2">Новости</h2>
-              <p className="text-gray-600">
-                Последние обновления
-              </p>
-            </div>
-            <Link href="/news" className="btn-link">
-              Все новости →
-            </Link>
+          <div className="mb-12">
+            <h2 className="text-data-blue mb-2">Новости</h2>
+            <p className="text-gray-600">
+              Последние обновления из нашего дата-центра
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
