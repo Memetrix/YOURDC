@@ -1,7 +1,11 @@
 import Image from 'next/image';
-import { datacenterStats, infrastructure, certificates, partners } from '@/data/mockData';
+import { getSiteSettings } from '@/lib/sanity';
+import { infrastructure, certificates, partners } from '@/data/mockData';
 
-export default function About() {
+export default async function About() {
+  const settings = await getSiteSettings();
+  const datacenterStats = settings?.datacenterStats || {};
+
   return (
     <>
       <section className="py-16 lg:py-24 bg-gray-50">

@@ -1,7 +1,9 @@
 import ContactForm from '@/components/ContactForm';
-import { contactInfo } from '@/data/mockData';
+import { getSiteSettings } from '@/lib/sanity';
 
-export default function Contacts() {
+export default async function Contacts() {
+  const settings = await getSiteSettings();
+  const contactInfo = settings?.contactInfo || {};
   const { phone, phoneTollfree, email, supportEmail, salesEmail, address, workingHours } = contactInfo;
 
   return (
@@ -36,7 +38,7 @@ export default function Contacts() {
                   <div>
                     <h3 className="font-semibold text-data-blue mb-1">Телефон</h3>
                     <p className="text-gray-600">{phone}</p>
-                    <p className="text-gray-600">{phoneTollfree} (бесплатный)</p>
+                    {phoneTollfree && <p className="text-gray-600">{phoneTollfree} (бесплатный)</p>}
                   </div>
                 </div>
 
@@ -49,43 +51,47 @@ export default function Contacts() {
                   <div>
                     <h3 className="font-semibold text-data-blue mb-1">Email</h3>
                     <p className="text-gray-600">{email}</p>
-                    <p className="text-gray-600">{supportEmail}</p>
-                    <p className="text-gray-600">{salesEmail}</p>
+                    {supportEmail && <p className="text-gray-600">{supportEmail}</p>}
+                    {salesEmail && <p className="text-gray-600">{salesEmail}</p>}
                   </div>
                 </div>
 
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-data-blue/10 rounded-selectel flex items-center justify-center">
-                    <svg className="w-6 h-6 text-data-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                {address && (
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-data-blue/10 rounded-selectel flex items-center justify-center">
+                      <svg className="w-6 h-6 text-data-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-data-blue mb-1">Адрес</h3>
+                      <p className="text-gray-600">
+                        Россия, {address.city}<br />
+                        {address.street}, {address.building && `д. ${address.building}`}<br />
+                        {address.office && `${address.office}`}<br />
+                        {address.postalCode}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-data-blue mb-1">Адрес</h3>
-                    <p className="text-gray-600">
-                      Россия, {address.city}<br />
-                      {address.street}, д. {address.building}<br />
-                      {address.office}<br />
-                      {address.postalCode}
-                    </p>
-                  </div>
-                </div>
+                )}
 
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-data-blue/10 rounded-selectel flex items-center justify-center">
-                    <svg className="w-6 h-6 text-data-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                {workingHours && (
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-data-blue/10 rounded-selectel flex items-center justify-center">
+                      <svg className="w-6 h-6 text-data-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-data-blue mb-1">Режим работы</h3>
+                      <p className="text-gray-600">
+                        Офис: {workingHours.office}<br />
+                        Поддержка: {workingHours.support}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-data-blue mb-1">Режим работы</h3>
-                    <p className="text-gray-600">
-                      Офис: {workingHours.office}<br />
-                      Поддержка: {workingHours.support}
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
 
               <div className="card bg-data-blue text-white">
@@ -96,32 +102,36 @@ export default function Contacts() {
                 <p className="text-white/90 font-medium mb-4">
                   Среднее время реакции: менее 15 минут
                 </p>
-                <a href={`tel:${phone.replace(/\D/g, '')}`} className="btn bg-white text-data-blue hover:bg-gray-100 w-full text-center block">
-                  Позвонить в поддержку
-                </a>
+                {phone && (
+                  <a href={`tel:${phone.replace(/\D/g, '')}`} className="btn bg-white text-data-blue hover:bg-gray-100 w-full text-center block">
+                    Позвонить в поддержку
+                  </a>
+                )}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 lg:py-24 bg-gray-50">
-        <div className="container">
-          <h2 className="text-center text-data-blue mb-4">Как нас найти</h2>
-          <p className="text-center text-gray-600 mb-12">
-            {address.city}, {address.street}, д. {address.building}
-          </p>
-          <div className="bg-gray-300 rounded-selectel-lg h-96 flex items-center justify-center">
-            <div className="text-center text-gray-600">
-              <svg className="w-24 h-24 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <p>Интерактивная карта</p>
+      {address && (
+        <section className="py-16 lg:py-24 bg-gray-50">
+          <div className="container">
+            <h2 className="text-center text-data-blue mb-4">Как нас найти</h2>
+            <p className="text-center text-gray-600 mb-12">
+              {address.city}, {address.street}, {address.building && `д. ${address.building}`}
+            </p>
+            <div className="bg-gray-300 rounded-selectel-lg h-96 flex items-center justify-center">
+              <div className="text-center text-gray-600">
+                <svg className="w-24 h-24 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <p>Интерактивная карта</p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Quick Contact */}
       <section className="py-16 lg:py-24">
@@ -133,12 +143,16 @@ export default function Contacts() {
                 Оставьте заявку, и наш менеджер свяжется с вами в течение 30 минут
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href={`tel:${phone.replace(/\D/g, '')}`} className="btn bg-signal-red text-white hover:bg-red-600 text-center">
-                  Позвонить сейчас
-                </a>
-                <a href={`mailto:${salesEmail}`} className="btn bg-white text-data-blue hover:bg-gray-100 text-center">
-                  Написать на email
-                </a>
+                {phone && (
+                  <a href={`tel:${phone.replace(/\D/g, '')}`} className="btn bg-signal-red text-white hover:bg-red-600 text-center">
+                    Позвонить сейчас
+                  </a>
+                )}
+                {salesEmail && (
+                  <a href={`mailto:${salesEmail}`} className="btn bg-white text-data-blue hover:bg-gray-100 text-center">
+                    Написать на email
+                  </a>
+                )}
               </div>
             </div>
           </div>
