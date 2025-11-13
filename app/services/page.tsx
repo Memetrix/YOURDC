@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Metadata } from 'next';
 import { getServices } from '@/lib/sanity';
+
+export const metadata: Metadata = {
+  title: "Услуги дата-центра",
+  description: "Колокация серверов, аренда стоек, виртуальные серверы VPS, облачные решения и управляемые сервисы. Гибкие тарифы, высокая надежность, техническая поддержка 24/7.",
+  openGraph: {
+    title: "Услуги дата-центра YOURDC",
+    description: "Колокация, VPS, облачные решения и управляемые сервисы. Техподдержка 24/7",
+  },
+};
 
 export default async function Services() {
   const services = await getServices();

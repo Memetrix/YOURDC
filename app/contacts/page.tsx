@@ -1,5 +1,15 @@
 import ContactForm from '@/components/ContactForm';
+import { Metadata } from 'next';
 import { getSiteSettings } from '@/lib/sanity';
+
+export const metadata: Metadata = {
+  title: "Контакты и консультация",
+  description: "Свяжитесь с YOURDC для получения консультации по услугам дата-центра. Телефон, email, адрес офиса. Техническая поддержка 24/7.",
+  openGraph: {
+    title: "Контакты YOURDC",
+    description: "Получите консультацию по услугам дата-центра. Техподдержка 24/7",
+  },
+};
 
 export default async function Contacts() {
   const settings = await getSiteSettings();

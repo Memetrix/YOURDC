@@ -1,5 +1,15 @@
 import Image from 'next/image';
+import { Metadata } from 'next';
 import { getSiteSettings, getInfrastructure, getCertificates, getPartners } from '@/lib/sanity';
+
+export const metadata: Metadata = {
+  title: "О дата-центре",
+  description: "YOURDC - современный дата-центр уровня Tier III с сертификацией международных стандартов. Узнайте о нашей инфраструктуре, партнерах и преимуществах.",
+  openGraph: {
+    title: "О дата-центре YOURDC",
+    description: "Современный дата-центр уровня Tier III с надежной инфраструктурой и международными сертификатами",
+  },
+};
 
 export default async function About() {
   const [settings, infrastructure, certificates, partners] = await Promise.all([

@@ -1,0 +1,18 @@
+# robots.txt для YOURDC
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /studio/
+
+# Sitemap
+Sitemap: https://yourdc.vercel.app/sitemap.xml
+
+# Основные поисковые боты
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+User-agent: Bingbot
+Allow: /

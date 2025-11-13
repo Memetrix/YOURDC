@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
@@ -36,8 +37,15 @@ export default function Header() {
     <header className="sticky top-0 z-[999] bg-white border-b border-gray-200 shadow-sm">
       <div className="container">
         <nav className="flex items-center justify-between py-4" aria-label="Main navigation">
-          <Link href="/" className="text-2xl font-bold text-data-blue hover:text-signal-red transition-colors">
-            YOURDC
+          <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+            <Image
+              src="/logo.png"
+              alt="YOURDC - Профессиональный дата-центр"
+              width={180}
+              height={45}
+              priority
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}

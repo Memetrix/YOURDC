@@ -1,5 +1,15 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { getAdvantages, getFAQ, getSiteSettings, getClients } from '@/lib/sanity';
+
+export const metadata: Metadata = {
+  title: "Преимущества дата-центра",
+  description: "Узнайте о преимуществах YOURDC: 99.99% uptime, надежная инфраструктура, круглосуточная поддержка, современное оборудование и выгодные условия размещения.",
+  openGraph: {
+    title: "Преимущества YOURDC",
+    description: "99.99% uptime, надежная инфраструктура, поддержка 24/7, современное оборудование",
+  },
+};
 
 export default async function Advantages() {
   const [advantages, faq, settings, clients] = await Promise.all([
