@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { services } from '@/data/mockData';
+import { getServices } from '@/lib/sanity';
 
-export default function Services() {
+export default async function Services() {
+  const services = await getServices();
+
   return (
     <>
       <section className="py-16 lg:py-24 bg-gray-50">
@@ -14,9 +16,9 @@ export default function Services() {
         </div>
       </section>
 
-      {services.map((service, index) => (
+      {services.map((service: any, index: number) => (
         <section
-          key={service.id}
+          key={service._id}
           id={service.id}
           className={`py-16 lg:py-24 ${index % 2 === 1 ? 'bg-gray-50' : ''}`}
         >
@@ -33,7 +35,7 @@ export default function Services() {
                   {service.fullDescription}
                 </p>
                 <ul className="space-y-3 mb-8">
-                  {service.features.map((feature, idx) => (
+                  {service.features?.map((feature: string, idx: number) => (
                     <li key={idx} className="flex items-start gap-3">
                       <svg className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -45,13 +47,27 @@ export default function Services() {
 
                 {/* Pricing */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  {Object.values(service.pricing).map((plan: any, idx) => (
-                    <div key={idx} className="card">
-                      <div className="text-sm text-gray-500 mb-1">{plan.name}</div>
-                      <div className="text-2xl font-bold text-data-blue mb-2">{plan.price}</div>
-                      <div className="text-xs text-gray-500">{plan.description}</div>
+                  {service.pricingStarter && (
+                    <div className="card">
+                      <div className="text-sm text-gray-500 mb-1">{service.pricingStarter.name}</div>
+                      <div className="text-2xl font-bold text-data-blue mb-2">{service.pricingStarter.price}</div>
+                      <div className="text-xs text-gray-500">{service.pricingStarter.description}</div>
                     </div>
-                  ))}
+                  )}
+                  {service.pricingProfessional && (
+                    <div className="card">
+                      <div className="text-sm text-gray-500 mb-1">{service.pricingProfessional.name}</div>
+                      <div className="text-2xl font-bold text-data-blue mb-2">{service.pricingProfessional.price}</div>
+                      <div className="text-xs text-gray-500">{service.pricingProfessional.description}</div>
+                    </div>
+                  )}
+                  {service.pricingEnterprise && (
+                    <div className="card">
+                      <div className="text-sm text-gray-500 mb-1">{service.pricingEnterprise.name}</div>
+                      <div className="text-2xl font-bold text-data-blue mb-2">{service.pricingEnterprise.price}</div>
+                      <div className="text-xs text-gray-500">{service.pricingEnterprise.description}</div>
+                    </div>
+                  )}
                 </div>
 
                 <Link href="/contacts" className="btn btn-colored">

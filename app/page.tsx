@@ -1,8 +1,19 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { datacenterStats, services, advantages, telecomOperators, news } from '@/data/mockData';
+import { getServices, getAdvantages, getTelecomOperators, getNews, getSiteSettings, urlFor } from '@/lib/sanity';
 
-export default function Home() {
+export default async function Home() {
+  // Получаем данные из Sanity
+  const [services, advantages, operators, news, settings] = await Promise.all([
+    getServices(),
+    getAdvantages(),
+    getTelecomOperators(),
+    getNews(),
+    getSiteSettings(),
+  ]);
+
+  const stats = settings?.datacenterStats || {};
+
   return (
     <>
       {/* Hero Section with Background */}
@@ -25,7 +36,7 @@ export default function Home() {
               Надежная инфраструктура для вашего бизнеса
             </h1>
             <p className="text-white/90 text-xl mb-8">
-              Профессиональный дата-центр с SLA {datacenterStats.sla}. Размещение оборудования, облачные решения и комплексная поддержка {datacenterStats.support}
+              Профессиональный дата-центр с SLA {stats.sla}. Размещение оборудования, облачные решения и комплексная поддержка {stats.support}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contacts" className="btn bg-signal-red text-white hover:bg-red-600 text-center">
@@ -44,19 +55,19 @@ export default function Home() {
         <div className="container">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{datacenterStats.sla}</div>
+              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{stats.sla}</div>
               <div className="text-gray-600">SLA по договору</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{datacenterStats.totalPower}</div>
+              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{stats.totalPower}</div>
               <div className="text-gray-600">Мощность</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{datacenterStats.racks}</div>
+              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{stats.racks}</div>
               <div className="text-gray-600">Стоек</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{datacenterStats.support}</div>
+              <div className="text-4xl lg:text-5xl font-bold text-data-blue mb-2">{stats.support}</div>
               <div className="text-gray-600">Поддержка</div>
             </div>
           </div>
@@ -117,77 +128,31 @@ export default function Home() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <Link href="/services#colocation" className="group">
-              <div className="card hover:shadow-lg transition-shadow duration-200 h-full cursor-pointer">
-                <div className="relative h-40 md:h-48 mb-4 rounded-selectel overflow-hidden">
-                  <Image
-                    src="/images/003.webp"
-                    alt="Colocation Service"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-200"
-                    loading="lazy"
-                    quality={85}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
+            {services.map((service: any, index: number) => (
+              <Link key={service._id} href={`/services#${service.id}`} className="group">
+                <div className="card hover:shadow-lg transition-shadow duration-200 h-full cursor-pointer">
+                  <div className="relative h-40 md:h-48 mb-4 rounded-selectel overflow-hidden">
+                    <Image
+                      src={index === 0 ? "/images/003.webp" : index === 1 ? "/images/004.webp" : "/images/010.webp"}
+                      alt={service.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-200"
+                      loading="lazy"
+                      quality={85}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                  <h3 className="text-xl md:text-2xl mb-3 text-data-blue">{service.title}</h3>
+                  <p className="text-gray-600 mb-4">
+                    {service.shortDescription}
+                  </p>
+                  <div className="text-sm text-gray-500 mb-4">
+                    {service.pricingStarter?.price || 'По запросу'}
+                  </div>
+                  <span className="btn-link">Подробнее →</span>
                 </div>
-                <h3 className="text-xl md:text-2xl mb-3 text-data-blue">Colocation</h3>
-                <p className="text-gray-600 mb-4">
-                  {services[0].shortDescription}
-                </p>
-                <div className="text-sm text-gray-500 mb-4">
-                  {services[0].pricing.starter.price}
-                </div>
-                <span className="btn-link">Подробнее →</span>
-              </div>
-            </Link>
-
-            <Link href="/services#cloud" className="group">
-              <div className="card hover:shadow-lg transition-shadow duration-200 h-full cursor-pointer">
-                <div className="relative h-40 md:h-48 mb-4 rounded-selectel overflow-hidden bg-gray-100 flex items-center justify-center">
-                  <Image
-                    src="/images/004.webp"
-                    alt="Cloud Services"
-                    width={300}
-                    height={300}
-                    className="object-contain group-hover:scale-105 transition-transform duration-200"
-                    loading="lazy"
-                    quality={85}
-                  />
-                </div>
-                <h3 className="text-xl md:text-2xl mb-3 text-data-blue">Облачные решения</h3>
-                <p className="text-gray-600 mb-4">
-                  {services[1].shortDescription}
-                </p>
-                <div className="text-sm text-gray-500 mb-4">
-                  {services[1].pricing.starter.price}
-                </div>
-                <span className="btn-link">Подробнее →</span>
-              </div>
-            </Link>
-
-            <Link href="/services#additional" className="group">
-              <div className="card hover:shadow-lg transition-shadow duration-200 h-full cursor-pointer">
-                <div className="relative h-40 md:h-48 mb-4 rounded-selectel overflow-hidden">
-                  <Image
-                    src="/images/010.webp"
-                    alt="Additional Services"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-200"
-                    loading="lazy"
-                    quality={85}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </div>
-                <h3 className="text-xl md:text-2xl mb-3 text-data-blue">Дополнительные услуги</h3>
-                <p className="text-gray-600 mb-4">
-                  {services[2].shortDescription}
-                </p>
-                <div className="text-sm text-gray-500 mb-4">
-                  {services[2].pricing.monitoring.price}
-                </div>
-                <span className="btn-link">Подробнее →</span>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -202,7 +167,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white rounded-selectel-lg p-6">
-              <div className="text-3xl font-bold text-data-blue mb-2">{datacenterStats.tierLevel}</div>
+              <div className="text-3xl font-bold text-data-blue mb-2">{stats.tierLevel}</div>
               <div className="text-gray-600 mb-3">Сертификация Uptime Institute</div>
               <p className="text-sm text-gray-500">
                 Подтвержденная надежность инфраструктуры
@@ -210,7 +175,7 @@ export default function Home() {
             </div>
 
             <div className="bg-white rounded-selectel-lg p-6">
-              <div className="text-3xl font-bold text-data-blue mb-2">{datacenterStats.machineRoomArea}</div>
+              <div className="text-3xl font-bold text-data-blue mb-2">{stats.machineRoomArea}</div>
               <div className="text-gray-600 mb-3">Площадь машинных залов</div>
               <p className="text-sm text-gray-500">
                 Современные помещения с системами климат-контроля
@@ -218,7 +183,7 @@ export default function Home() {
             </div>
 
             <div className="bg-white rounded-selectel-lg p-6">
-              <div className="text-3xl font-bold text-data-blue mb-2">{datacenterStats.powerPerRack}</div>
+              <div className="text-3xl font-bold text-data-blue mb-2">{stats.powerPerRack}</div>
               <div className="text-gray-600 mb-3">Мощность на стойку</div>
               <p className="text-sm text-gray-500">
                 Гибкие варианты для любых задач
@@ -234,7 +199,7 @@ export default function Home() {
             </div>
 
             <div className="bg-white rounded-selectel-lg p-6">
-              <div className="text-3xl font-bold text-data-blue mb-2">{datacenterStats.autonomousOperation}</div>
+              <div className="text-3xl font-bold text-data-blue mb-2">{stats.autonomousOperation}</div>
               <div className="text-gray-600 mb-3">Автономная работа</div>
               <p className="text-sm text-gray-500">
                 Запас топлива для длительной автономии
@@ -261,8 +226,8 @@ export default function Home() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {advantages.map((advantage, index) => (
-              <div key={index} className="flex gap-4">
+            {advantages.map((advantage: any) => (
+              <div key={advantage._id} className="flex gap-4">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 rounded-full bg-green-400 flex items-center justify-center">
                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -271,7 +236,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-data-blue">{advantage.title}</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-data-blue">{advantage.name}</h3>
                   <p className="text-gray-600">
                     {advantage.description}
                   </p>
@@ -363,13 +328,13 @@ export default function Home() {
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {telecomOperators.map((operator, index) => (
+            {operators.map((operator: any) => (
               <div
-                key={index}
+                key={operator._id}
                 className="bg-white rounded-selectel p-8 flex items-center justify-center min-h-32 shadow-sm hover:shadow-md transition-all duration-200 group"
               >
                 <Image
-                  src={operator.logo}
+                  src={urlFor(operator.logo).width(200).url()}
                   alt={operator.name}
                   width={200}
                   height={80}
@@ -399,16 +364,15 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {news.slice(0, 4).map((item, index) => (
-              <div key={index} className="card hover:shadow-lg transition-shadow duration-200">
+            {news.slice(0, 2).map((item: any) => (
+              <div key={item._id} className="card hover:shadow-lg transition-shadow duration-200">
                 <div className="flex items-start gap-3 mb-3">
-                  <span className="text-sm text-gray-500">{new Date(item.date).toLocaleDateString('ru-RU')}</span>
-                  <span className="text-xs px-3 py-1 bg-data-blue/10 text-data-blue rounded-full">
-                    {item.category}
+                  <span className="text-sm text-gray-500">
+                    {new Date(item.date).toLocaleDateString('ru-RU')}
                   </span>
                 </div>
                 <h3 className="text-xl font-semibold mb-2 text-data-blue">{item.title}</h3>
-                <p className="text-gray-600">{item.excerpt}</p>
+                <p className="text-gray-600">{item.description}</p>
               </div>
             ))}
           </div>
