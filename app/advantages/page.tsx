@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { getAdvantages, getFAQ, getSiteSettings } from '@/lib/sanity';
-import { clients } from '@/data/mockData';
+import { getAdvantages, getFAQ, getSiteSettings, getClients } from '@/lib/sanity';
 
 export default async function Advantages() {
-  const [advantages, faq, settings] = await Promise.all([
+  const [advantages, faq, settings, clients] = await Promise.all([
     getAdvantages(),
     getFAQ(),
     getSiteSettings(),
+    getClients(),
   ]);
 
   const stats = settings?.datacenterStats || {};
@@ -157,8 +157,8 @@ export default async function Advantages() {
             Реальные кейсы наших клиентов
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {clients.map((client, index) => (
-              <div key={index} className="card">
+            {clients.map((client: any) => (
+              <div key={client._id} className="card">
                 <div className="text-sm text-gray-500 mb-2">{client.industry}</div>
                 <h3 className="text-xl font-semibold text-data-blue mb-3">{client.name}</h3>
                 <div className="inline-block px-3 py-1 bg-data-blue/10 text-data-blue rounded-full text-xs mb-3">

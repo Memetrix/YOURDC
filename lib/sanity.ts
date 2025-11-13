@@ -39,3 +39,19 @@ export async function getTelecomOperators() {
 export async function getSiteSettings() {
   return client.fetch(`*[_type == "siteSettings"][0]`)
 }
+
+export async function getInfrastructure() {
+  return client.fetch(`*[_type == "infrastructure"] | order(order asc)`)
+}
+
+export async function getCertificates() {
+  return client.fetch(`*[_type == "certificate"] | order(order asc)`)
+}
+
+export async function getPartners() {
+  return client.fetch(`*[_type == "partner"] | order(order asc)`)
+}
+
+export async function getClients() {
+  return client.fetch(`*[_type == "client"] | order(order asc)`)
+}

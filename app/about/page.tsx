@@ -1,9 +1,13 @@
 import Image from 'next/image';
-import { getSiteSettings } from '@/lib/sanity';
-import { infrastructure, certificates, partners } from '@/data/mockData';
+import { getSiteSettings, getInfrastructure, getCertificates, getPartners } from '@/lib/sanity';
 
 export default async function About() {
-  const settings = await getSiteSettings();
+  const [settings, infrastructure, certificates, partners] = await Promise.all([
+    getSiteSettings(),
+    getInfrastructure(),
+    getCertificates(),
+    getPartners(),
+  ]);
   const datacenterStats = settings?.datacenterStats || {};
 
   return (
@@ -78,8 +82,8 @@ export default async function About() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            {Object.values(infrastructure).map((section: any, index) => (
-              <div key={index} className="card">
+            {infrastructure.map((section: any) => (
+              <div key={section._id} className="card">
                 <h3 className="text-xl font-semibold text-data-blue mb-4">{section.title}</h3>
                 <ul className="space-y-3">
                   {section.items.map((item: string, idx: number) => (
@@ -134,8 +138,8 @@ export default async function About() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {certificates.map((cert, index) => (
-              <div key={index} className="card">
+            {certificates.map((cert: any) => (
+              <div key={cert._id} className="card">
                 <div className="flex items-start gap-3 mb-3">
                   <svg className="w-6 h-6 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -157,9 +161,9 @@ export default async function About() {
         <div className="container">
           <h2 className="text-center text-data-blue mb-12">Наши партнеры</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {partners.map((partner, index) => (
-              <div key={index} className="bg-white rounded-selectel p-6 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-center font-medium text-gray-700">{partner}</div>
+            {partners.map((partner: any) => (
+              <div key={partner._id} className="bg-white rounded-selectel p-6 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-center font-medium text-gray-700">{partner.name}</div>
               </div>
             ))}
           </div>

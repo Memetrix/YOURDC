@@ -4,6 +4,10 @@ import news from './news'
 import faq from './faq'
 import telecomOperator from './telecomOperator'
 import siteSettings from './siteSettings'
+import infrastructure from './infrastructure'
+import certificate from './certificate'
+import partner from './partner'
+import client from './client'
 
 export const schemaTypes = [
   service,
@@ -12,4 +16,8 @@ export const schemaTypes = [
   faq,
   telecomOperator,
   siteSettings,
+  infrastructure,
+  certificate,
+  partner,
+  client,
 ]
